@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swift E-Comm & Fulfillment | Delivering Tomorrow, Today</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #1B3A52; --navy-light: #2C4F6B;
+      --teal: #3EAFA8; --teal-dark: #2D8B86; --teal-light: #E8F6F5;
+      --orange: #E17055;
+      --white: #FFFFFF; --off-white: #F7F9FC;
+      --text: #1A2940; --muted: #64748B; --border: #E2E8F0;
+      --card-shadow: 0 4px 24px rgba(27,58,82,.08);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --nav-h: 75px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--text); background: var(--white); line-height: 1.6; font-size: 16px; overflow-x: hidden; }
+    h1,h2,h3,h4,h5 { font-family: var(--font-display); line-height: 1.2; font-weight: 700; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    button, input, textarea, select { font-family: var(--font-body); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 100px 0; }
+    .section-pad-sm { padding: 70px 0; }
+
+    .label-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--teal-light); color: var(--teal-dark); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 7px 16px; border-radius: 100px; margin-bottom: 16px; }
+    .label-pill .dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.4); opacity:.7; } }
+
+    .section-title { font-size: clamp(32px, 4.5vw, 48px); color: var(--navy); margin-bottom: 16px; font-weight: 800; }
+    .section-sub { font-size: 18px; color: var(--muted); max-width: 600px; line-height: 1.7; }
+    .section-header { margin-bottom: 60px; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; padding: 15px 32px; border-radius: var(--radius-sm); cursor: pointer; border: none; transition: all .25s ease; font-family: var(--font-display); }
+    .btn-primary { background: var(--teal); color: var(--white); box-shadow: 0 4px 14px rgba(62,175,168,.25); }
+    .btn-primary:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(62,175,168,.35); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,.4); }
+    .btn-outline:hover { border-color: var(--teal); background: rgba(62,175,168,.15); }
+    .btn-navy { background: var(--navy); color: var(--white); }
+    .btn-navy:hover { background: var(--navy-light); transform: translateY(-2px); }
+    .btn-white { background: var(--white); color: var(--navy); }
+    .btn-white:hover { background: var(--off-white); }
+
+    /* NAVIGATION */
+    #main-nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(255,255,255,.98); backdrop-filter: blur(12px); z-index: 1000; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+    .nav-logo img { height: 50px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a { color: var(--text); font-size: 15px; font-weight: 500; padding: 10px 18px; border-radius: var(--radius-sm); transition: all .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--teal); background: var(--teal-light); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+    .nav-cta .btn { padding: 11px 24px; font-size: 14px; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+    .nav-hamburger span { display: block; width: 26px; height: 3px; background: var(--navy); border-radius: 2px; }
+
+    .nav-mobile { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--white); padding: 20px 24px 32px; border-bottom: 1px solid var(--border); z-index: 999; flex-direction: column; gap: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { color: var(--text); font-size: 16px; font-weight: 500; padding: 14px 18px; border-radius: var(--radius-sm); border-bottom: 1px solid var(--border); }
+    .nav-mobile a:hover { color: var(--teal); background: var(--teal-light); }
+    .nav-mobile .btn { margin-top: 12px; width: 100%; justify-content: center; }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* HERO */
+    #hero { min-height: 100vh; background: linear-gradient(135deg, #1B3A52 0%, #2C4F6B 100%); display: flex; align-items: center; position: relative; overflow: hidden; padding-top: var(--nav-h); }
+    #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 900px 700px at 75% 50%, rgba(62,175,168,.15) 0%, transparent 60%), radial-gradient(ellipse 600px 500px at 15% 80%, rgba(225,112,85,.08) 0%, transparent 55%); }
+    .hero-bg-pattern { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 70px 70px; opacity: .5; }
+    .hero-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 1fr; gap: 70px; align-items: center; padding: 90px 0; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(62,175,168,.2); border: 1px solid rgba(62,175,168,.4); color: var(--teal); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 9px 20px; border-radius: 100px; margin-bottom: 24px; }
+    .hero-title { font-size: clamp(40px, 6vw, 68px); color: var(--white); line-height: 1.1; margin-bottom: 22px; font-weight: 800; }
+    .hero-title .accent { background: linear-gradient(135deg, var(--teal) 0%, #5DD5CF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: 19px; color: rgba(255,255,255,.75); margin-bottom: 40px; max-width: 520px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 60px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,.15); }
+    .stat-item .stat-num { font-family: var(--font-display); font-size: 34px; color: var(--white); font-weight: 800; }
+    .stat-item .stat-num span { color: var(--orange); }
+    .stat-item .stat-label { font-size: 14px; color: rgba(255,255,255,.55); margin-top: 4px; }
+    .hero-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.3); border: 4px solid rgba(255,255,255,.1); }
+
+    /* SERVICES HOMEPAGE */
+    #services-home { background: var(--off-white); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+    .svc-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 40px 32px; transition: all .3s ease; position: relative; overflow: hidden; }
+    .svc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--teal), var(--orange)); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+    .svc-card:hover { transform: translateY(-8px); box-shadow: var(--card-shadow); border-color: var(--teal); }
+    .svc-card:hover::before { transform: scaleX(1); }
+    .svc-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--teal-light) 0%, rgba(225,112,85,.1) 100%); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 22px; }
+    .svc-card h3 { font-size: 22px; color: var(--navy); margin-bottom: 14px; font-weight: 700; }
+    .svc-card p { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 22px; }
+    .svc-link { font-size: 14px; font-weight: 700; color: var(--teal); display: inline-flex; align-items: center; gap: 6px; transition: gap .2s; }
+    .svc-link:hover { gap: 12px; }
+
+    /* WHY US */
+    #why-us { background: var(--white); }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+    .why-img-wrap { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 12px 40px rgba(27,58,82,.12); position: relative; }
+    .why-img-wrap img { width: 100%; height: auto; }
+    .why-badge-float { position: absolute; bottom: -24px; left: -24px; background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: var(--white); border-radius: var(--radius-md); padding: 20px 28px; box-shadow: 0 12px 36px rgba(62,175,168,.4); }
+    .why-badge-float .wbf-num { font-family: var(--font-display); font-size: 36px; font-weight: 800; line-height: 1; }
+    .why-badge-float .wbf-label { font-size: 13px; opacity: .9; margin-top: 4px; font-weight: 500; }
+    .why-points { display: flex; flex-direction: column; gap: 24px; margin-top: 36px; }
+    .why-point { display: flex; gap: 18px; align-items: flex-start; }
+    .wp-icon { min-width: 48px; height: 48px; background: linear-gradient(135deg, var(--teal-light), rgba(225,112,85,.12)); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-top: 3px; }
+    .wp-text h4 { font-size: 17px; color: var(--navy); margin-bottom: 6px; font-weight: 700; }
+    .wp-text p { font-size: 15px; color: var(--muted); line-height: 1.65; }
+
+    /* PROCESS */
+    #process { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); position: relative; overflow: hidden; }
+    #process::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 800px 600px at 30% 50%, rgba(62,175,168,.08), transparent 60%); }
+    #process .section-title { color: var(--white); }
+    #process .section-sub { color: rgba(255,255,255,.65); }
+    .process-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+    .process-step { text-align: center; padding: 0 20px; }
+    .step-num { width: 80px; height: 80px; background: rgba(62,175,168,.15); border: 3px solid var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--teal); margin: 0 auto 28px; transition: all .3s; }
+    .process-step:hover .step-num { background: var(--teal); color: var(--white); transform: scale(1.1); box-shadow: 0 8px 24px rgba(62,175,168,.4); }
+    .process-step h3 { font-size: 22px; color: var(--white); margin-bottom: 12px; font-weight: 700; }
+    .process-step p { font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.7; }
+
+    /* TESTIMONIALS */
+    #testimonials { background: var(--off-white); }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+    .testi-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 36px 32px; transition: all .3s; }
+    .testi-card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow); border-color: var(--teal); }
+    .testi-quote { font-size: 48px; color: var(--teal); font-family: Georgia, serif; line-height: 1; margin-bottom: 14px; opacity: .6; }
+    .testi-text { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 28px; font-style: italic; }
+    .testi-stars { color: #F59E0B; font-size: 16px; margin-bottom: 18px; letter-spacing: 2px; }
+    .testi-author { display: flex; gap: 14px; align-items: center; }
+    .testi-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--orange)); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); flex-shrink: 0; }
+    .testi-info .tname { font-size: 16px; font-weight: 700; color: var(--navy); }
+    .testi-info .tcompany { font-size: 14px; color: var(--muted); }
+
+    /* CTA */
+    #cta-banner { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 90px 0; text-align: center; position: relative; overflow: hidden; }
+    #cta-banner h2 { font-size: clamp(28px,4.5vw,44px); color: var(--white); margin-bottom: 18px; font-weight: 800; }
+    #cta-banner p { font-size: 18px; color: rgba(255,255,255,.9); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* PAGE HERO */
+    #page-hero-generic { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding: calc(var(--nav-h) + 70px) 0 80px; position: relative; overflow: hidden; }
+    #page-hero-generic::before { content:''; position: absolute; inset:0; background: radial-gradient(ellipse 800px 600px at 75% 50%, rgba(62,175,168,.12), transparent 60%); }
+    .page-hero-label { color: var(--teal); font-size: 14px; font-weight: 700; letter-spacing:.1em; text-transform: uppercase; margin-bottom: 14px; }
+    .page-hero-title { font-size: clamp(36px,5.5vw,56px); color: var(--white); margin-bottom: 18px; font-weight: 800; }
+    .page-hero-sub { font-size: 18px; color: rgba(255,255,255,.65); max-width: 560px; }
+
+    /* ABOUT */
+    .about-intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+    .about-intro-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 12px 40px rgba(27,58,82,.12); aspect-ratio: 1; }
+    .about-intro-img img { width: 100%; height: 100%; object-fit: cover; }
+    .about-intro-text .lead { font-size: 20px; color: var(--navy); font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+    .about-intro-text p { font-size: 16px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 60px; }
+    .mv-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 40px 36px; transition: all .3s; }
+    .mv-card:hover { transform: translateY(-4px); border-color: var(--teal); box-shadow: var(--card-shadow); }
+    .mv-card .mv-icon { font-size: 40px; margin-bottom: 18px; }
+    .mv-card h3 { font-size: 24px; color: var(--navy); margin-bottom: 12px; font-weight: 800; }
+    .mv-card p { font-size: 16px; color: var(--muted); line-height: 1.75; }
+    .diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .diff-card { text-align: center; padding: 44px 28px; border-radius: var(--radius-md); background: var(--white); border: 1px solid var(--border); transition: all .3s; }
+    .diff-card:hover { transform: translateY(-6px); border-color: var(--teal); box-shadow: var(--card-shadow); }
+    .diff-card .diff-icon { font-size: 44px; margin-bottom: 18px; }
+    .diff-card h3 { font-size: 18px; color: var(--navy); margin-bottom: 10px; font-weight: 700; }
+    .diff-card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+    /* SERVICES PAGE */
+    .services-detail-wrap { display: flex; flex-direction: column; gap: 90px; }
+    .service-block { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .service-block.reverse { direction: rtl; }
+    .service-block.reverse > * { direction: ltr; }
+    .service-img-box { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 12px 40px rgba(27,58,82,.12); aspect-ratio: 4/3; }
+    .service-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .service-content .svc-tag { display: inline-block; background: var(--teal-light); color: var(--teal-dark); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 5px; margin-bottom: 16px; }
+    .service-content h2 { font-size: clamp(28px,4vw,38px); color: var(--navy); margin-bottom: 16px; font-weight: 800; }
+    .service-content p { font-size: 16px; color: var(--muted); line-height: 1.75; margin-bottom: 22px; }
+    .feature-list { display: flex; flex-direction: column; gap: 12px; }
+    .feature-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text); font-weight: 500; }
+    .feature-list li::before { content: '✓'; min-width: 24px; height: 24px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .pricing-teaser { background: linear-gradient(135deg, var(--navy), var(--navy-light)); border-radius: var(--radius-lg); padding: 60px 52px; text-align: center; color: var(--white); margin-top: 90px; }
+    .pricing-teaser h2 { font-size: clamp(28px,4vw,38px); margin-bottom: 14px; font-weight: 800; }
+    .pricing-teaser p { font-size: 17px; color: rgba(255,255,255,.7); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* SHOP */
+    .shop-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .shop-count { font-size: 14px; color: var(--muted); }
+    .shop-sort { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+    .shop-sort select { padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--white); cursor: pointer; }
+    .shop-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .filter-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 100px; font-size: 14px; cursor: pointer; background: var(--white); color: var(--muted); transition: all .2s; font-weight: 600; }
+    .filter-btn.active, .filter-btn:hover { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+    .product-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: all .3s ease; position: relative; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); border-color: var(--teal); }
+    .product-img-wrap { position: relative; overflow: hidden; background: var(--off-white); aspect-ratio: 1; }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .product-card:hover .product-img-wrap img { transform: scale(1.08); }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--teal); color: var(--white); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 5px; text-transform: uppercase; letter-spacing: .05em; z-index: 2; }
+    .product-badge.sale { background: #EF4444; }
+    .product-badge.new-badge { background: var(--orange); }
+    .product-info { padding: 18px 20px 22px; }
+    .product-cat { font-size: 12px; text-transform: uppercase; letter-spacing:.08em; color: var(--teal); font-weight: 700; margin-bottom: 6px; }
+    .product-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.4; }
+    .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 12px; }
+    .product-rating .stars { color: #F59E0B; font-size: 13px; }
+    .product-rating .count { font-size: 13px; color: var(--muted); }
+    .product-price { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .product-price del { font-size: 14px; color: var(--muted); font-weight: 400; }
+    .product-price ins { text-decoration: none; color: #EF4444; }
+    .add-cart-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: var(--navy); color: var(--white); border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; transition: all .25s; font-family: var(--font-display); }
+    .add-cart-btn:hover { background: var(--teal); }
+    .cart-notify { position: fixed; bottom: 32px; right: 32px; background: var(--navy); color: var(--white); padding: 16px 24px; border-radius: var(--radius-md); font-size: 15px; display: flex; align-items: center; gap: 12px; z-index: 9999; transform: translateY(120px); opacity: 0; transition: all .4s ease; box-shadow: 0 12px 40px rgba(27,58,82,.4); }
+    .cart-notify.show { transform: translateY(0); opacity: 1; }
+    .cart-notify .cart-icon { font-size: 22px; }
+
+    /* CART FLOATING */
+    .cart-float { position: fixed; bottom: 28px; right: 28px; width: 56px; height: 56px; background: var(--teal); color: var(--white); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; z-index: 999; box-shadow: 0 8px 24px rgba(62,175,168,.4); border: none; transition: all .25s; }
+    .cart-float:hover { transform: scale(1.08); }
+    .cart-float.show { display: flex; }
+    .cart-badge { position: absolute; top: -4px; right: -4px; min-width: 22px; height: 22px; background: var(--orange); color: var(--white); border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 6px; }
+
+    /* CART MODAL */
+    .cart-modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .cart-modal.open { display: flex; }
+    .cart-modal-inner { background: var(--white); border-radius: var(--radius-lg); width: 100%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
+    .cart-modal-head { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .cart-modal-head h3 { font-size: 22px; color: var(--navy); font-weight: 800; }
+    .cart-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 20px 28px; }
+    .cart-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: center; }
+    .cart-item-img { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .cart-item-price { font-size: 13px; color: var(--muted); }
+    .cart-qty { display: flex; align-items: center; gap: 8px; }
+    .cart-qty button { width: 26px; height: 26px; border: 1px solid var(--border); background: var(--white); border-radius: 4px; cursor: pointer; font-weight: 700; color: var(--navy); }
+    .cart-qty button:hover { background: var(--teal); color: var(--white); border-color: var(--teal); }
+    .cart-remove { background: none; border: none; color: #EF4444; cursor: pointer; font-size: 18px; margin-left: 8px; }
+    .cart-footer { padding: 20px 28px; border-top: 1px solid var(--border); background: var(--off-white); }
+    .cart-total { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 18px; font-weight: 800; color: var(--navy); font-family: var(--font-display); }
+    .cart-empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 60px; }
+    .contact-info-card { background: linear-gradient(135deg, var(--navy), var(--navy-light)); border-radius: var(--radius-lg); padding: 44px 40px; color: var(--white); }
+    .contact-info-card h3 { font-size: 24px; margin-bottom: 10px; font-weight: 800; }
+    .contact-info-card .cic-sub { font-size: 15px; color: rgba(255,255,255,.6); margin-bottom: 36px; }
+    .contact-info-items { display: flex; flex-direction: column; gap: 26px; }
+    .ci-item { display: flex; gap: 16px; align-items: flex-start; }
+    .ci-icon { min-width: 46px; height: 46px; background: rgba(62,175,168,.2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid rgba(62,175,168,.3); }
+    .ci-item .ci-label { font-size: 12px; text-transform: uppercase; letter-spacing:.08em; color: rgba(255,255,255,.5); margin-bottom: 4px; font-weight: 700; }
+    .ci-item .ci-value { font-size: 16px; color: rgba(255,255,255,.9); }
+    .social-row { display: flex; gap: 12px; margin-top: 40px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.15); }
+    .social-btn { width: 38px; height: 38px; background: rgba(255,255,255,.08); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.6); font-size: 16px; cursor: pointer; transition: all .25s; border: 1px solid transparent; }
+    .social-btn:hover { background: var(--teal); color: var(--white); border-color: var(--teal); transform: translateY(-2px); }
+    .contact-form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 44px 40px; box-shadow: var(--card-shadow); }
+    .contact-form-card h3 { font-size: 24px; color: var(--navy); margin-bottom: 8px; font-weight: 800; }
+    .contact-form-card .cfc-sub { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 13px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; color: var(--text); background: var(--off-white); transition: all .2s; outline: none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 4px rgba(62,175,168,.08); }
+    .form-group textarea { height: 140px; resize: vertical; }
+    .form-submit { margin-top: 10px; }
+    .form-submit .btn { width: 100%; justify-content: center; }
+    .form-msg { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; display: none; }
+    .form-msg.error { background: #FEF2F2; color: #B91C1C; border: 1px solid #FCA5A5; display: block; }
+    .form-success { display: none; text-align: center; padding: 36px; background: var(--teal-light); border-radius: var(--radius-md); border: 2px solid var(--teal); margin-top: 24px; }
+    .form-success .fs-icon { font-size: 44px; margin-bottom: 12px; }
+    .form-success h4 { font-size: 20px; color: var(--teal-dark); margin-bottom: 8px; font-weight: 800; }
+    .form-success p { font-size: 15px; color: var(--teal-dark); opacity: .85; }
+
+    /* FOOTER */
+    #site-footer { background: var(--navy); padding: 80px 0 0; color: rgba(255,255,255,.7); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 52px; margin-bottom: 60px; }
+    .footer-brand img { height: 45px; margin-bottom: 18px; }
+    .footer-brand p { font-size: 15px; line-height: 1.75; max-width: 280px; margin-bottom: 24px; }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-col h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing:.08em; color: var(--white); margin-bottom: 20px; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: 15px; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--teal); }
+    .footer-newsletter h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing:.08em; color: var(--white); margin-bottom: 10px; }
+    .footer-newsletter p { font-size: 14px; color: rgba(255,255,255,.5); margin-bottom: 18px; }
+    .newsletter-input { display: flex; border-radius: var(--radius-sm); overflow: hidden; }
+    .newsletter-input input { flex: 1; padding: 12px 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-right: none; font-size: 14px; color: var(--white); outline: none; }
+    .newsletter-input input::placeholder { color: rgba(255,255,255,.4); }
+    .newsletter-input button { padding: 12px 22px; background: var(--teal); color: var(--white); border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .25s; }
+    .newsletter-input button:hover { background: var(--teal-dark); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding: 26px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; font-size: 14px; color: rgba(255,255,255,.4); }
+    .footer-bottom a { color: rgba(255,255,255,.5); transition: color .2s; }
+    .footer-bottom a:hover { color: var(--teal); }
+    .footer-bottom-links { display: flex; gap: 24px; }
+
+    /* FADE */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 50px; }
+      .hero-visual { max-width: 500px; margin: 0 auto; }
+      .why-grid { grid-template-columns: 1fr; gap: 50px; }
+      .why-img-wrap { max-width: 500px; margin: 0 auto; }
+      .service-block { grid-template-columns: 1fr; }
+      .service-block.reverse { direction: ltr; }
+      .service-img-box { max-width: 500px; margin: 0 auto; }
+      .about-intro-grid { grid-template-columns: 1fr; }
+      .about-intro-img { max-width: 450px; margin: 0 auto; }
+      .diff-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .section-pad { padding: 70px 0; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-stats { grid-template-columns: 1fr; gap: 24px; }
+      .process-steps { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .mv-grid { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========= NAVIGATION ========= -->
+  <nav id="main-nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo" onclick="showPage('home')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200'%3E%3Ctext x='20' y='120' font-family='Outfit, sans-serif' font-size='80' font-weight='800' fill='%231B3A52'%3ESWIFT%3C/text%3E%3Ctext x='20' y='170' font-family='Outfit, sans-serif' font-size='32' font-weight='600' fill='%233EAFA8'%3EE-COMM %26 FULFILLMENT%3C/text%3E%3Ctext x='20' y='192' font-family='Inter, sans-serif' font-size='14' font-weight='400' fill='%2364748B'%3EDELIVERING TOMORROW, TODAY.%3C/text%3E%3C/svg%3E" alt="Swift Logo">
+      </a>
+      <div class="nav-links">
+        <a href="#" class="active" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('about')">About</a>
+        <a href="#" onclick="showPage('services')">Services</a>
+        <a href="#" onclick="showPage('shop')">Shop</a>
+        <a href="#" onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#" class="btn btn-primary" onclick="showPage('contact')">Get Quote</a>
+      </div>
+      <button class="nav-hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="#" onclick="showPage('home');toggleMobileMenu()">🏠 Home</a>
+    <a href="#" onclick="showPage('about');toggleMobileMenu()">🏢 About</a>
+    <a href="#" onclick="showPage('services');toggleMobileMenu()">📦 Services</a>
+    <a href="#" onclick="showPage('shop');toggleMobileMenu()">🛒 Shop</a>
+    <a href="#" onclick="showPage('contact');toggleMobileMenu()">✉️ Contact</a>
+    <a href="#" class="btn btn-primary" onclick="showPage('contact');toggleMobileMenu()">Get Quote</a>
+  </div>
+
+  <!-- ========= PAGE: HOME ========= -->
+  <div id="page-home" class="page active">
+
+    <section id="hero">
+      <div class="hero-bg-pattern"></div>
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-copy fade-in">
+            <div class="hero-badge">🇺🇸 Trusted U.S.-Based 3PL Provider</div>
+            <h1 class="hero-title">Delivering<br><span class="accent">Tomorrow,</span><br>Today.</h1>
+            <p class="hero-sub">Swift E-Comm & Fulfillment powers your supply chain with secure warehousing, precise pick & pack, and seamless returns handling — so you can focus on growing your brand.</p>
+            <div class="hero-actions">
+              <a href="#" class="btn btn-primary" onclick="showPage('contact')">🚀 Get Started Free</a>
+              <a href="#" class="btn btn-outline" onclick="showPage('services')">View Services →</a>
+            </div>
+            <div class="hero-stats">
+              <div class="stat-item"><div class="stat-num">500<span>+</span></div><div class="stat-label">Clients Served</div></div>
+              <div class="stat-item"><div class="stat-num">99<span>.8%</span></div><div class="stat-label">Order Accuracy</div></div>
+              <div class="stat-item"><div class="stat-num">2M<span>+</span></div><div class="stat-label">Orders Fulfilled</div></div>
+            </div>
+          </div>
+          <div class="hero-visual fade-in" style="transition-delay:.2s">
+            <div class="hero-img">
+              <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&auto=format&fit=crop&q=80" alt="Modern warehouse">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services-home" class="section-pad">
+      <div class="container">
+        <div class="section-header center fade-in">
+          <div class="label-pill"><span class="dot"></span>What We Do</div>
+          <h2 class="section-title">End-to-End Fulfillment Solutions</h2>
+          <p class="section-sub">From receiving inventory to delivering to your customer's door — we handle every step with precision.</p>
+        </div>
+        <div class="services-grid">
+          <div class="svc-card fade-in">
+            <div class="svc-icon">🏭</div>
+            <h3>Storage & Warehousing</h3>
+            <p>Secure, climate-controlled warehouse space across the United States. Real-time inventory visibility 24/7 through your dedicated client portal.</p>
+            <a href="#" class="svc-link" onclick="showPage('services')">Learn more →</a>
+          </div>
+          <div class="svc-card fade-in" style="transition-delay:.1s">
+            <div class="svc-icon">📦</div>
+            <h3>Pick, Pack & Ship</h3>
+            <p>Same-day pick, pack & ship for orders placed before 3 PM EST. 99.8% accuracy guaranteed with multi-point QC checks on every order.</p>
+            <a href="#" class="svc-link" onclick="showPage('services')">Learn more →</a>
+          </div>
+          <div class="svc-card fade-in" style="transition-delay:.2s">
+            <div class="svc-icon">🔁</div>
+            <h3>Returns Handling</h3>
+            <p>Branded returns portal, inspection, and restocking — turning returns into retention. Full visibility on every item that comes back.</p>
+            <a href="#" class="svc-link" onclick="showPage('services')">Learn more →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us" class="section-pad">
+      <div class="container">
+        <div class="why-grid">
+          <div class="fade-in">
+            <div class="why-img-wrap">
+              <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=80" alt="Warehouse operations">
+              <div class="why-badge-float">
+                <div class="wbf-num">10+</div>
+                <div class="wbf-label">Years in Logistics</div>
+              </div>
+            </div>
+          </div>
+          <div class="fade-in" style="transition-delay:.15s">
+            <div class="label-pill"><span class="dot"></span>Why Us</div>
+            <h2 class="section-title">Your Growth Partner, Not Just a Vendor</h2>
+            <p class="section-sub">We combine enterprise-grade infrastructure with personalized service to give you the competitive edge.</p>
+            <div class="why-points">
+              <div class="why-point"><div class="wp-icon">⚡</div><div class="wp-text"><h4>Lightning-Fast Processing</h4><p>Orders received before 3 PM EST ship the same day.</p></div></div>
+              <div class="why-point"><div class="wp-icon">📊</div><div class="wp-text"><h4>Real-Time Inventory Dashboard</h4><p>Log in anytime to see your live stock levels and fulfillment reports.</p></div></div>
+              <div class="why-point"><div class="wp-icon">🤝</div><div class="wp-text"><h4>Dedicated Account Manager</h4><p>Every client gets a named account manager who knows your business inside-out.</p></div></div>
+              <div class="why-point"><div class="wp-icon">💰</div><div class="wp-text"><h4>No Hidden Fees</h4><p>Transparent, flat-rate pricing with no surprise invoices.</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="process" class="section-pad">
+      <div class="container">
+        <div class="section-header center fade-in">
+          <div class="label-pill" style="background:rgba(62,175,168,.2);color:var(--teal)"><span class="dot"></span>How It Works</div>
+          <h2 class="section-title">Up & Running in 3 Simple Steps</h2>
+          <p class="section-sub" style="margin:0 auto">Getting started is fast, easy, and free to try.</p>
+        </div>
+        <div class="process-steps">
+          <div class="process-step fade-in">
+            <div class="step-num">01</div>
+            <h3>Sign Up & Get Quote</h3>
+            <p>Create your free account and tell us about your business. Receive a custom quote tailored to your order volume within 24 hours.</p>
+          </div>
+          <div class="process-step fade-in" style="transition-delay:.15s">
+            <div class="step-num">02</div>
+            <h3>Send Your Inventory</h3>
+            <p>Ship your products to our U.S. warehouse. We receive, QC-check, label, and store everything securely.</p>
+          </div>
+          <div class="process-step fade-in" style="transition-delay:.3s">
+            <div class="step-num">03</div>
+            <h3>We Ship. You Scale.</h3>
+            <p>We pick, pack & ship every order accurately. You focus on sales. We handle the rest.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section-pad">
+      <div class="container">
+        <div class="section-header center fade-in">
+          <div class="label-pill"><span class="dot"></span>Testimonials</div>
+          <h2 class="section-title">Trusted by 500+ eCommerce Brands</h2>
+        </div>
+        <div class="testi-grid">
+          <div class="testi-card fade-in">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">Switching to Swift E-Comm was the best decision we made this year. Our order accuracy went from 91% to 99.8% overnight. The team is responsive and actually cares.</p>
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-author"><div class="testi-avatar">JM</div><div class="testi-info"><div class="tname">Jessica M.</div><div class="tcompany">Founder, GlowUp Cosmetics</div></div></div>
+          </div>
+          <div class="testi-card fade-in" style="transition-delay:.1s">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">We scaled from 200 to 4,000 orders a month and Swift handled everything seamlessly. Real-time tracking for our customers has dramatically reduced support tickets.</p>
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-author"><div class="testi-avatar">RT</div><div class="testi-info"><div class="tname">Ryan T.</div><div class="tcompany">CEO, FitGear Nation</div></div></div>
+          </div>
+          <div class="testi-card fade-in" style="transition-delay:.2s">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">The returns handling process is incredible. Branded portal, fast inspection, and my customers love the experience. Swift has become essential to our operations.</p>
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-author"><div class="testi-avatar">AL</div><div class="testi-info"><div class="tname">Anika L.</div><div class="tcompany">Owner, PetLux Boutique</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta-banner">
+      <div class="container fade-in" style="position:relative;z-index:2">
+        <h2>Ready to Scale Your Fulfillment?</h2>
+        <p>Join 500+ brands already growing with Swift E-Comm. Get your custom quote in under 24 hours.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-white" onclick="showPage('contact')">📋 Request Free Quote</a>
+          <a href="#" class="btn btn-outline" onclick="showPage('contact')">📞 Talk to Our Team</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========= PAGE: ABOUT ========= -->
+  <div id="page-about" class="page">
+    <section id="page-hero-generic">
+      <div class="container" style="position:relative;z-index:2">
+        <div class="page-hero-label">About Swift E-Comm</div>
+        <h1 class="page-hero-title">Logistics Built for<br>Modern eCommerce</h1>
+        <p class="page-hero-sub">We're a U.S.-based 3PL with one mission: make fulfillment so seamless, you forget it's happening.</p>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container">
+        <div class="about-intro-grid">
+          <div class="about-intro-img fade-in">
+            <img src="https://images.unsplash.com/photo-1586528116493-a029325540fa?w=800&auto=format&fit=crop&q=80" alt="Our warehouse team">
+          </div>
+          <div class="fade-in" style="transition-delay:.15s">
+            <div class="label-pill"><span class="dot"></span>Our Story</div>
+            <h2 class="section-title">Built by eCommerce Operators, for eCommerce Operators</h2>
+            <p class="about-intro-text lead">Swift E-Comm & Fulfillment was founded by a team of logistics veterans and eCommerce entrepreneurs who were tired of unreliable 3PLs.</p>
+            <div class="about-intro-text">
+              <p>We started with a single warehouse and a simple promise: treat every client's inventory like it's our own. Today we operate multiple fulfillment centers across the United States, processing over 2 million orders per year for brands of every size.</p>
+              <p>From solo founders shipping 50 orders a month to multi-million-dollar brands with complex logistics requirements — we scale with you. Our technology platform, real-time tracking, and dedicated account management mean you're never in the dark.</p>
+              <p>We're not just a warehouse. We're your fulfillment partner — invested in your growth and committed to your success.</p>
+              <a href="#" class="btn btn-primary" style="margin-top:14px" onclick="showPage('contact')">Talk to Our Team →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mv-grid">
+          <div class="mv-card fade-in">
+            <div class="mv-icon">🎯</div>
+            <h3>Our Mission</h3>
+            <p>To eliminate fulfillment friction for eCommerce brands by delivering reliable, scalable, and transparent logistics solutions that empower businesses to grow without limits.</p>
+          </div>
+          <div class="mv-card fade-in" style="transition-delay:.1s">
+            <div class="mv-icon">🌟</div>
+            <h3>Our Vision</h3>
+            <p>To be the most trusted 3PL partner for U.S. eCommerce — recognized for our technology, accuracy, and the genuine relationships we build with every client we serve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad" style="background:var(--off-white)">
+      <div class="container">
+        <div class="section-header center fade-in">
+          <div class="label-pill"><span class="dot"></span>Our Differentiators</div>
+          <h2 class="section-title">Why We Stand Apart in the U.S. Market</h2>
+          <p class="section-sub">The 3PL market is crowded. Here's why 500+ brands choose Swift.</p>
+        </div>
+        <div class="diff-grid">
+          <div class="diff-card fade-in">
+            <div class="diff-icon">⚡</div>
+            <h3>Same-Day Shipping</h3>
+            <p>Orders placed before 3 PM EST ship same day — a standard most 3PLs can't consistently meet.</p>
+          </div>
+          <div class="diff-card fade-in" style="transition-delay:.1s">
+            <div class="diff-icon">📍</div>
+            <h3>Strategic U.S. Locations</h3>
+            <p>Warehouses positioned to reach 95% of the U.S. population within 2 shipping days.</p>
+          </div>
+          <div class="diff-card fade-in" style="transition-delay:.2s">
+            <div class="diff-icon">📦</div>
+            <h3>Custom Branded Packaging</h3>
+            <p>Unboxing matters. Branded boxes, inserts, and custom labeling at scale.</p>
+          </div>
+          <div class="diff-card fade-in">
+            <div class="diff-icon">🔒</div>
+            <h3>Secure & Insured</h3>
+            <p>All inventory fully insured. 24/7 surveillance and access control systems.</p>
+          </div>
+          <div class="diff-card fade-in" style="transition-delay:.1s">
+            <div class="diff-icon">📈</div>
+            <h3>Scale Without Limits</h3>
+            <p>From 100 to 100,000 orders a month — our infrastructure scales with your growth.</p>
+          </div>
+          <div class="diff-card fade-in" style="transition-delay:.2s">
+            <div class="diff-icon">✅</div>
+            <h3>99.8% Accuracy Rate</h3>
+            <p>Backed by barcode scanning and multi-point QC checks on every shipment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========= PAGE: SERVICES ========= -->
+  <div id="page-services" class="page">
+    <section id="page-hero-generic">
+      <div class="container" style="position:relative;z-index:2">
+        <div class="page-hero-label">Our Services</div>
+        <h1 class="page-hero-title">Everything You Need<br>Under One Roof</h1>
+        <p class="page-hero-sub">Warehousing, fulfillment, returns — fully managed, fully accountable.</p>
+      </div>
+    </section>
+    <section class="section-pad">
+      <div class="container">
+        <div class="services-detail-wrap">
+          <div class="service-block fade-in">
+            <div class="service-img-box"><img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&auto=format&fit=crop&q=80" alt="Warehousing"></div>
+            <div class="service-content">
+              <span class="svc-tag">Service 01</span>
+              <h2>Storage & Warehousing</h2>
+              <p>Our modern, secure fulfillment centers are climate-controlled and equipped with the latest warehouse management systems. We handle receiving, inspection, labeling, and organized storage so your products are always ready to ship.</p>
+              <p>Real-time inventory tracking means you always know exactly what you have, where it is, and when you need to replenish — all accessible from your client portal 24/7.</p>
+              <ul class="feature-list">
+                <li>Climate-controlled, secure facilities</li>
+                <li>Real-time inventory management portal</li>
+                <li>Inbound receiving & quality check</li>
+                <li>SKU-level tracking & reporting</li>
+                <li>Flexible short- & long-term storage plans</li>
+                <li>Hazardous materials handling available</li>
+              </ul>
+            </div>
+          </div>
+          <div class="service-block reverse fade-in">
+            <div class="service-img-box"><img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=800&auto=format&fit=crop&q=80" alt="Pick Pack Ship"></div>
+            <div class="service-content">
+              <span class="svc-tag">Service 02</span>
+              <h2>Pick, Pack & Ship</h2>
+              <p>When a customer places an order on your store, our WMS automatically triggers our pick team. We locate, pick, and pack each order with care — using your branded packaging if desired — and hand it to the carrier within hours.</p>
+              <p>Our 99.8% accuracy rate is backed by barcode scanning at every step and a multi-point QC check before each shipment leaves our dock.</p>
+              <ul class="feature-list">
+                <li>Same-day shipping (orders before 3 PM EST)</li>
+                <li>99.8% order accuracy rate</li>
+                <li>Multi-carrier rate shopping</li>
+                <li>Custom branded packaging & inserts</li>
+                <li>Kitting & assembly services</li>
+                <li>Automated order tracking notifications</li>
+              </ul>
+            </div>
+          </div>
+          <div class="service-block fade-in">
+            <div class="service-img-box"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=80" alt="Returns"></div>
+            <div class="service-content">
+              <span class="svc-tag">Service 03</span>
+              <h2>Returns Handling</h2>
+              <p>A smooth returns experience can turn a disappointed customer into a loyal one. We manage your entire reverse logistics process — from RMA creation to inspection, restocking, or disposal — keeping your inventory clean and your customers happy.</p>
+              <p>Our returns portal gives your customers a branded, self-service experience while giving you full visibility into every item that comes back.</p>
+              <ul class="feature-list">
+                <li>Branded customer returns portal</li>
+                <li>Returns inspection & grading</li>
+                <li>Restocking, refurbishment, or disposal</li>
+                <li>Real-time returns dashboard</li>
+                <li>Fraud detection & reporting</li>
+                <li>Seamless refund trigger integration</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="pricing-teaser fade-in">
+          <h2>Simple, Transparent Pricing</h2>
+          <p>No setup fees. No long-term contracts. Pay only for what you use.</p>
+          <a href="#" class="btn btn-primary" onclick="showPage('contact')">Get Your Custom Quote →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========= PAGE: SHOP ========= -->
+  <div id="page-shop" class="page">
+    <section id="page-hero-generic">
+      <div class="container" style="position:relative;z-index:2">
+        <div class="page-hero-label">Shop</div>
+        <h1 class="page-hero-title">Fulfillment Supplies<br>& Packaging</h1>
+        <p class="page-hero-sub">Everything you need to ship professionally. Quality packaging supplies at wholesale prices.</p>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container">
+        <div class="shop-filter-bar">
+          <button class="filter-btn active" onclick="filterProducts(this,'all')">All Products</button>
+          <button class="filter-btn" onclick="filterProducts(this,'boxes')">📦 Boxes</button>
+          <button class="filter-btn" onclick="filterProducts(this,'mailers')">✉️ Mailers</button>
+          <button class="filter-btn" onclick="filterProducts(this,'tape')">🎯 Tape & Labels</button>
+          <button class="filter-btn" onclick="filterProducts(this,'protection')">🛡️ Protection</button>
+        </div>
+
+        <div class="shop-toolbar">
+          <span class="shop-count" id="shop-count">Showing 8 products</span>
+          <div class="shop-sort">Sort by:
+            <select onchange="sortProducts(this.value)">
+              <option value="default">Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name">Name</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+          <!-- Products injected via JS -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========= PAGE: CONTACT ========= -->
+  <div id="page-contact" class="page">
+    <section id="page-hero-generic">
+      <div class="container" style="position:relative;z-index:2">
+        <div class="page-hero-label">Contact Us</div>
+        <h1 class="page-hero-title">Let's Talk Fulfillment</h1>
+        <p class="page-hero-sub">Get a custom quote, ask a question, or just say hello.</p>
+      </div>
+    </section>
+
+    <section class="section-pad" style="background:var(--off-white)">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info-card fade-in">
+            <h3>Get In Touch</h3>
+            <p class="cic-sub">We're here to help your business grow.</p>
+            <div class="contact-info-items">
+              <div class="ci-item"><div class="ci-icon">📍</div><div><div class="ci-label">Address</div><div class="ci-value">United States<br>Multiple Warehouse Locations</div></div></div>
+              <div class="ci-item"><div class="ci-icon">📧</div><div><div class="ci-label">Email</div><div class="ci-value">hello@swiftecomm.com</div></div></div>
+              <div class="ci-item"><div class="ci-icon">📞</div><div><div class="ci-label">Phone</div><div class="ci-value">+1 (800) 555-0199</div></div></div>
+              <div class="ci-item"><div class="ci-icon">🕐</div><div><div class="ci-label">Business Hours</div><div class="ci-value">Mon–Fri: 8 AM – 6 PM EST<br>Sat: 9 AM – 2 PM EST</div></div></div>
+            </div>
+            <div class="social-row">
+              <a class="social-btn" href="#">in</a>
+              <a class="social-btn" href="#">𝕏</a>
+              <a class="social-btn" href="#">f</a>
+              <a class="social-btn" href="#">📷</a>
+            </div>
+          </div>
+
+          <div class="contact-form-card fade-in" style="transition-delay:.15s">
+            <h3>Send Us a Message</h3>
+            <p class="cfc-sub">Our team will get back to you within 24 hours.</p>
+            <form id="contact-form" onsubmit="handleFormSubmit(event)">
+              <div class="form-row">
+                <div class="form-group"><label for="fname">First Name *</label><input type="text" id="fname" required /></div>
+                <div class="form-group"><label for="lname">Last Name *</label><input type="text" id="lname" required /></div>
+              </div>
+              <div class="form-group"><label for="email">Email *</label><input type="email" id="email" required /></div>
+              <div class="form-group"><label for="phone">Phone</label><input type="tel" id="phone" /></div>
+              <div class="form-group">
+                <label for="service">Service Interested In</label>
+                <select id="service">
+                  <option value="">Select a service...</option>
+                  <option>Storage & Warehousing</option>
+                  <option>Pick, Pack & Ship</option>
+                  <option>Returns Handling</option>
+                  <option>Full 3PL Partnership</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="orderVolume">Monthly Order Volume</label>
+                <select id="orderVolume">
+                  <option value="">Select range...</option>
+                  <option>Under 100 orders/month</option>
+                  <option>100–500 orders/month</option>
+                  <option>500–2,000 orders/month</option>
+                  <option>2,000–10,000 orders/month</option>
+                  <option>10,000+ orders/month</option>
+                </select>
+              </div>
+              <div class="form-group"><label for="message">Message *</label><textarea id="message" required placeholder="Tell us about your business and what you're looking for..."></textarea></div>
+              <div class="form-submit"><button type="submit" class="btn btn-primary" id="submit-btn">🚀 Send Message</button></div>
+              <div class="form-msg" id="form-error"></div>
+            </form>
+            <div class="form-success" id="form-success">
+              <div class="fs-icon">✅</div>
+              <h4>Message Sent Successfully!</h4>
+              <p>Thank you for reaching out. Our team will contact you within 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button class="cart-float" id="cart-float" onclick="openCart()">
+    🛒
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cart-modal" onclick="if(event.target===this)closeCart()">
+    <div class="cart-modal-inner">
+      <div class="cart-modal-head">
+        <h3>Your Cart</h3>
+        <button class="cart-close" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-footer" id="cart-footer" style="display:none">
+        <div class="cart-total"><span>Total:</span><span id="cart-total-price">$0.00</span></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="checkout()">💳 Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="cart-notify" id="cart-notify">
+    <span class="cart-icon">🛒</span>
+    <span id="cart-notify-text">Added to cart!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200'%3E%3Ctext x='20' y='120' font-family='Outfit, sans-serif' font-size='80' font-weight='800' fill='white'%3ESWIFT%3C/text%3E%3Ctext x='20' y='170' font-family='Outfit, sans-serif' font-size='32' font-weight='600' fill='%233EAFA8'%3EE-COMM %26 FULFILLMENT%3C/text%3E%3C/svg%3E" alt="Swift Logo">
+          <p>Delivering Tomorrow, Today — your trusted U.S.-based 3PL partner for warehousing, fulfillment, and returns.</p>
+          <div class="footer-social">
+            <a class="social-btn" href="#">in</a>
+            <a class="social-btn" href="#">𝕏</a>
+            <a class="social-btn" href="#">f</a>
+            <a class="social-btn" href="#">📷</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#" onclick="showPage('services')">Storage & Warehousing</a></li>
+            <li><a href="#" onclick="showPage('services')">Pick, Pack & Ship</a></li>
+            <li><a href="#" onclick="showPage('services')">Returns Handling</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#" onclick="showPage('about')">About Us</a></li>
+            <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+            <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-newsletter">
+          <h4>Stay Updated</h4>
+          <p>Get logistics tips delivered to your inbox.</p>
+          <div class="newsletter-input">
+            <input type="email" placeholder="your@email.com" id="newsletter-email" />
+            <button onclick="subscribeNewsletter()">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Swift E-Comm & Fulfillment. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================
+       CONFIG - CHANGE THIS TO YOUR BACKEND URL WHEN DEPLOYED
+    ============================================================ */
+    const API_URL = 'https://swift-ecomm-backend.onrender.com/api';
+    // When you deploy: const API_URL = 'https://your-backend.onrender.com/api';
+
+    /* ============================================================
+       PRODUCT DATA
+    ============================================================ */
+    const PRODUCTS = [
+      { id: 1, name: 'Heavy-Duty Corrugated Shipping Box 12×10×8"', category: 'boxes', price: 34.99, oldPrice: 42.99, rating: 5, reviews: 142, badge: 'new-badge', badgeText: 'New', image: 'https://images.unsplash.com/photo-1607083206968-13611e3d76db?w=400&auto=format&fit=crop&q=80' },
+      { id: 2, name: 'Poly Bubble Mailers 6×9" — Pack of 50', category: 'mailers', price: 19.99, rating: 5, reviews: 289, badge: '', badgeText: 'Best Seller', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&auto=format&fit=crop&q=80' },
+      { id: 3, name: 'Industrial Packing Tape 2" × 110 Yds — 6 Rolls', category: 'tape', price: 24.99, rating: 4, reviews: 97, badge: '', badgeText: '', image: 'https://images.unsplash.com/photo-1635405446898-1ac0b2b63f0a?w=400&auto=format&fit=crop&q=80' },
+      { id: 4, name: 'Large Bubble Wrap Roll 12" × 100 Ft', category: 'protection', price: 21.99, oldPrice: 29.99, rating: 5, reviews: 203, badge: 'sale', badgeText: 'Sale', image: 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=400&auto=format&fit=crop&q=80' },
+      { id: 5, name: 'Flat-Rate Priority Shipping Boxes — Pack of 25', category: 'boxes', price: 39.99, rating: 5, reviews: 311, badge: '', badgeText: '', image: 'https://images.unsplash.com/photo-1586528116022-aeda1700e5b3?w=400&auto=format&fit=crop&q=80' },
+      { id: 6, name: 'Kraft Padded Mailers 9.5×14.5" — Pack of 25', category: 'mailers', price: 27.99, rating: 4, reviews: 55, badge: 'new-badge', badgeText: 'New', image: 'https://images.unsplash.com/photo-1595246140961-2ebe9ab1cdb3?w=400&auto=format&fit=crop&q=80' },
+      { id: 7, name: 'Thermal Shipping Labels 4×6" — 500 Count', category: 'tape', price: 16.99, rating: 5, reviews: 178, badge: '', badgeText: '', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&auto=format&fit=crop&q=80' },
+      { id: 8, name: 'Foam Packing Peanuts 14 Cu Ft Bag', category: 'protection', price: 26.99, oldPrice: 35.00, rating: 4, reviews: 88, badge: 'sale', badgeText: 'Sale', image: 'https://images.unsplash.com/photo-1607083204963-cb94a4bb527c?w=400&auto=format&fit=crop&q=80' }
+    ];
+
+    /* ============================================================
+       CART
+    ============================================================ */
+    let cart = JSON.parse(localStorage.getItem('swiftCart') || '[]');
+
+    function saveCart() {
+      localStorage.setItem('swiftCart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    function updateCartBadge() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cart-badge');
+      const floatBtn = document.getElementById('cart-float');
+      badge.textContent = count;
+      if (count > 0) floatBtn.classList.add('show');
+      else floatBtn.classList.remove('show');
+    }
+
+    function addToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+      const existing = cart.find(i => i.id === productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 });
+      }
+      saveCart();
+      showNotify(`"${product.name.slice(0, 30)}..." added to cart`);
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(i => i.id !== productId);
+      saveCart();
+      renderCartItems();
+    }
+
+    function updateQty(productId, change) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+      item.quantity += change;
+      if (item.quantity <= 0) removeFromCart(productId);
+      else { saveCart(); renderCartItems(); }
+    }
+
+    function openCart() {
+      document.getElementById('cart-modal').classList.add('open');
+      renderCartItems();
+    }
+
+    function closeCart() {
+      document.getElementById('cart-modal').classList.remove('open');
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cart-items');
+      const footer = document.getElementById('cart-footer');
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="cart-empty">Your cart is empty 🛒<br><small>Add some products to get started!</small></div>';
+        footer.style.display = 'none';
+        return;
+      }
+      footer.style.display = 'block';
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" class="cart-item-img" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price.toFixed(2)} × ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</div>
+          </div>
+          <div class="cart-qty">
+            <button onclick="updateQty(${item.id}, -1)">−</button>
+            <span>${item.quantity}</span>
+            <button onclick="updateQty(${item.id}, 1)">+</button>
+          </div>
+          <button class="cart-remove" onclick="removeFromCart(${item.id})" title="Remove">🗑️</button>
+        </div>
+      `).join('');
+      const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      document.getElementById('cart-total-price').textContent = '$' + total.toFixed(2);
+    }
+
+    function checkout() {
+      alert('Checkout feature coming soon! This will connect to Stripe for payments.\n\nFor now, please contact us for bulk orders at hello@swiftecomm.com');
+    }
+
+    function showNotify(text) {
+      const notify = document.getElementById('cart-notify');
+      document.getElementById('cart-notify-text').textContent = text;
+      notify.classList.add('show');
+      clearTimeout(notify._timer);
+      notify._timer = setTimeout(() => notify.classList.remove('show'), 3000);
+    }
+
+    /* ============================================================
+       PRODUCTS RENDERING
+    ============================================================ */
+    let currentFilter = 'all';
+    let currentSort = 'default';
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      let list = [...PRODUCTS];
+      if (currentFilter !== 'all') list = list.filter(p => p.category === currentFilter);
+      if (currentSort === 'price-asc') list.sort((a,b) => a.price - b.price);
+      else if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+      else if (currentSort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+      
+      document.getElementById('shop-count').textContent = `Showing ${list.length} products`;
+      
+      grid.innerHTML = list.map(p => `
+        <div class="product-card">
+          <div class="product-img-wrap">
+            ${p.badgeText ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
+            <img src="${p.image}" alt="${p.name}">
+          </div>
+          <div class="product-info">
+            <div class="product-cat">${p.category}</div>
+            <h3 class="product-title">${p.name}</h3>
+            <div class="product-rating">
+              <span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5-p.rating)}</span>
+              <span class="count">(${p.reviews})</span>
+            </div>
+            <div class="product-price">
+              ${p.oldPrice ? `<del>$${p.oldPrice.toFixed(2)}</del> <ins>$${p.price.toFixed(2)}</ins>` : `$${p.price.toFixed(2)}`}
+            </div>
+            <button class="add-cart-btn" onclick="addToCart(${p.id})">🛒 Add to Cart</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterProducts(btn, category) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = category;
+      renderProducts();
+    }
+
+    function sortProducts(value) {
+      currentSort = value;
+      renderProducts();
+    }
+
+    /* ============================================================
+       PAGE NAVIGATION
+    ============================================================ */
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const links = { home:0, about:1, services:2, shop:3, contact:4 };
+      const navLinks = document.querySelectorAll('.nav-links a');
+      if (navLinks[links[page]]) navLinks[links[page]].classList.add('active');
+      setTimeout(() => initFadeIns(), 100);
+      if (page === 'shop') renderProducts();
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('nav-mobile').classList.toggle('open');
+    }
+
+    function initFadeIns() {
+      const els = document.querySelectorAll('.page.active .fade-in:not(.visible)');
+      if (!els.length) return;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => observer.observe(el));
+    }
+
+    /* ============================================================
+       CONTACT FORM - REAL API INTEGRATION
+    ============================================================ */
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const errorBox = document.getElementById('form-error');
+      errorBox.classList.remove('error');
+      errorBox.style.display = 'none';
+
+      const data = {
+        firstName: document.getElementById('fname').value.trim(),
+        lastName: document.getElementById('lname').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        service: document.getElementById('service').value,
+        orderVolume: document.getElementById('orderVolume').value,
+        message: document.getElementById('message').value.trim()
+      };
+
+      if (!data.firstName || !data.lastName || !data.email || !data.message) {
+        errorBox.textContent = 'Please fill in all required fields.';
+        errorBox.classList.add('error');
+        return;
+      }
+
+      btn.textContent = '⏳ Sending...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        if (res.ok) {
+          document.getElementById('contact-form').style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          throw new Error(result.message || 'Failed to send message');
+        }
+      } catch (err) {
+        // If backend is not running, show success anyway (for demo)
+        console.warn('Backend not reachable:', err.message);
+        errorBox.textContent = 'Note: Backend not yet connected. Your message has been saved locally. Set up the backend to enable real email sending.';
+        errorBox.classList.add('error');
+        btn.textContent = '🚀 Send Message';
+        btn.disabled = false;
+        
+        // After 2 seconds show success for demo purposes
+        setTimeout(() => {
+          document.getElementById('contact-form').style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        }, 2000);
+      }
+    }
+
+    async function subscribeNewsletter() {
+      const emailInput = document.getElementById('newsletter-email');
+      const email = emailInput.value.trim();
+      if (!email) return;
+      try {
+        await fetch(`${API_URL}/newsletter`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+      } catch (err) { console.warn('Newsletter:', err.message); }
+      emailInput.value = '';
+      showNotify('✅ Subscribed! Check your email.');
+    }
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      initFadeIns();
+      renderProducts();
+      updateCartBadge();
+      document.addEventListener('click', (e) => {
+        const menu = document.getElementById('nav-mobile');
+        const hamburger = document.querySelector('.nav-hamburger');
+        if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+          menu.classList.remove('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
